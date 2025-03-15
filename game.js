@@ -206,6 +206,15 @@ document.getElementById('auto').addEventListener('click', () => {
     console.log('Auto mode not implemented');
 });
 
+// Attach a generic event listener to all buttons so that they lose focus after being clicked.
+// This fixes an issue where the button remains focused, causing subsequent spacebar keyup events
+// to trigger the button's click event (e.g., inadvertently starting a new game).
+document.querySelectorAll('button').forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.target.blur();
+    });
+});
+
 // Start the game
 spawnPiece();
 requestAnimationFrame(update);
