@@ -41,12 +41,15 @@ const fallInterval = 1000;
 
 // Variables for auto mode
 let isAuto = false;
+let usedAutoMode = false;  // tracks if autopilot has been used during this game
 let autoMoveTarget = null;
+let autoRestartScheduled = false;  // ensures only one auto restart is scheduled
 
 // Check URL parameter for autopilot mode.
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get('autopilot') === 'true') {
     isAuto = true;
+    usedAutoMode = true;
     console.log('Autopilot triggered by URL parameter');
 }
 
@@ -55,6 +58,13 @@ function spawnPiece() {
     currentPiece = { type, rotation: 0, x: Math.floor(boardWidth / 2) - 1, y: 0 };
     if (!isValidPosition(currentPiece)) {
         gameOver = true;
+        // Schedule auto restart if game is over in auto mode
+        if (isAuto && !autoRestartScheduled) {
+            autoRestartScheduled = true;
+            setTimeout(() => {
+                startNewGame(true);
+            }, 1500);
+        }
     }
 }
 
@@ -111,7 +121,7 @@ function clearRows() {
     }
     if (rowsCleared > 0) {
         score += [0, 100, 300, 500, 800][rowsCleared];
-        if (score > highScore) {
+        if (!usedAutoMode && score > highScore) {
             highScore = score;
             localStorage.setItem('highScore', highScore);
         }
@@ -326,6 +336,24 @@ function update(time = 0) {
     requestAnimationFrame(update);
 }
 
+// ----- New Game Helper -----
+function startNewGame(autoRestart) {
+    board = Array.from({ length: boardHeight }, () => Array(boardWidth).fill(null));
+    score = 0;
+    gameOver = false;
+    isPaused = false;
+    autoMoveTarget = null;
+    if (!autoRestart) {
+        isAuto = false;         // manual new game resets auto mode
+        usedAutoMode = false;
+    } else {
+        // In auto restart, keep auto mode active and simply reset its usage.
+        usedAutoMode = false;
+    }
+    autoRestartScheduled = false;
+    spawnPiece();
+}
+
 // ----- Event Listeners -----
 document.addEventListener('keydown', (e) => {
     // Disable manual controls if in auto mode.
@@ -341,12 +369,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('newGame').addEventListener('click', () => {
-    board = Array.from({ length: boardHeight }, () => Array(boardWidth).fill(null));
-    score = 0;
-    gameOver = false;
-    isPaused = false;
-    autoMoveTarget = null;
-    spawnPiece();
+    startNewGame(false);
 });
 
 document.getElementById('pause').addEventListener('click', () => {
@@ -355,6 +378,7 @@ document.getElementById('pause').addEventListener('click', () => {
 
 document.getElementById('auto').addEventListener('click', () => {
     isAuto = !isAuto;
+    if (isAuto) usedAutoMode = true;
     console.log(`Auto mode ${isAuto ? 'enabled' : 'disabled'}`);
     autoMoveTarget = null;
 });
