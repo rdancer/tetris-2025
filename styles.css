@@ -65,11 +65,7 @@ button {
     color: white;
 }
 
-a {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+footer a {
     font-size: 16px;
     color: #000;
     text-decoration: none;
