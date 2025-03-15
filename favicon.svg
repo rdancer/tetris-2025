@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg4253"
+   sodipodi:docname="favicon.svg"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs4257" />
+  <sodipodi:namedview
+     id="namedview4255"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="16.046875"
+     inkscape:cx="18.91334"
+     inkscape:cy="32"
+     inkscape:window-width="1390"
+     inkscape:window-height="1205"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="bottom-row" />
+  <!-- Dark background -->
+  <rect
+     id="rect448"
+     x="2.12"
+     y="0.50"
+     width="58.95"
+     height="58.64"
+     fill="#333333" />
+  <!-- TOP ROW (Cells with y-offset ≈12) -->
+  <g
+     id="top-row">
+    <!-- Cell 1: T letter (T piece, purple #800080) -->
+    <g
+       id="cell1-T">
+      <rect
+         id="rect450"
+         x="7.43"
+         y="8.65"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect452"
+         x="12.80"
+         y="8.28"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect454"
+         x="18.24"
+         y="8.71"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect456"
+         x="12.80"
+         y="13.84"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect456-2"
+         x="12.52"
+         y="25.17"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect456-7"
+         x="12.71"
+         y="19.62"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+    </g>
+    <!-- Cell 2: E letter (O piece, yellow #FFFF00) -->
+    <g
+       id="cell2-E">
+      <rect
+         id="rect458"
+         x="26.38"
+         y="8.46"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect460"
+         x="31.81"
+         y="8.46"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect462"
+         x="26.38"
+         y="13.84"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect462-3"
+         x="26.23"
+         y="18.87"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect462-0"
+         x="26.35"
+         y="23.92"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect462-8"
+         x="31.77"
+         y="23.98"
+         width="5"
+         height="5"
+         fill="#eded00" />
+      <rect
+         id="rect464"
+         x="31.63"
+         y="15.77"
+         width="5"
+         height="5"
+         fill="#eded00" />
+    </g>
+    <!-- Cell 3: T letter (T piece, purple #800080) -->
+    <g
+       id="cell3-T">
+      <rect
+         id="rect466"
+         x="39.08"
+         y="8.52"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect468"
+         x="44.33"
+         y="8.46"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect470"
+         x="49.82"
+         y="8.59"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect472"
+         x="44.20"
+         y="13.84"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect456-7-9"
+         x="44.11"
+         y="19.25"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+      <rect
+         id="rect456-7-9-9"
+         x="43.74"
+         y="24.36"
+         width="5"
+         height="5"
+         fill="#e900e9" />
+    </g>
+  </g>
+  <!-- BOTTOM ROW (Cells with y-offset ≈32) -->
+  <g
+     id="bottom-row">
+    <!-- Cell 1: R letter (upside‑down J, orange #FFA500) -->
+    <g
+       id="cell1-R">
+      <rect
+         id="rect474"
+         x="10.80"
+         y="32.44"
+         width="5"
+         height="5"
+         fill="#ffa500" />
+      <rect
+         id="rect476"
+         x="16.11"
+         y="32.38"
+         width="5"
+         height="5"
+         fill="#ffa500" />
+      <rect
+         id="rect478"
+         x="10.93"
+         y="37.69"
+         width="5"
+         height="5"
+         fill="#ffa500" />
+      <rect
+         id="rect480"
+         x="10.99"
+         y="43.07"
+         width="5"
+         height="5"
+         fill="#ffa500" />
+      <rect
+         id="rect474-4"
+         x="10.96"
+         y="48.35"
+         width="5"
+         height="5"
+         fill="#ffa500" />
+    </g>
+    <!-- Cell 2: I letter (I piece, cyan #00FFFF) -->
+    <g
+       id="cell2-I"
+       transform="translate(-0.99707888,0.06231743)">
+      <rect
+         id="rect482"
+         x="29"
+         y="32"
+         width="5"
+         height="5"
+         fill="#00ffff" />
+      <rect
+         id="rect484"
+         x="28.879999"
+         y="37.5"
+         width="5"
+         height="5"
+         fill="#00ffff" />
+      <rect
+         id="rect486"
+         x="29"
+         y="42.75"
+         width="5"
+         height="5"
+         fill="#00ffff" />
+      <rect
+         id="rect488"
+         x="29"
+         y="48.060001"
+         width="5"
+         height="5"
+         fill="#00ffff" />
+    </g>
+    <!-- Cell 3: S letter (S piece, red #FF0000) -->
+    <g
+       id="cell3-S">
+      <rect
+         id="rect490"
+         x="42.71"
+         y="32.20"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+      <rect
+         id="rect492"
+         x="47.83"
+         y="32.01"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+      <rect
+         id="rect494"
+         x="42.01"
+         y="47.92"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+      <rect
+         id="rect496"
+         x="47.38"
+         y="47.86"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+      <rect
+         id="rect490-8"
+         x="42.87"
+         y="37.51"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+      <rect
+         id="rect490-3"
+         x="47.17"
+         y="42.68"
+         width="5"
+         height="5"
+         fill="#ff0b0b" />
+    </g>
+  </g>
+</svg>
