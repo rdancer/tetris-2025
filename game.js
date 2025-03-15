@@ -10,7 +10,6 @@ const TETRIMINOS = [
     { rotations: [[[-1,0], [0,0], [1,0], [0,-1]], [[0,-1], [0,0], [0,1], [1,0]], [[-1,0], [0,0], [1,0], [0,1]], [[0,-1], [0,0], [0,1], [-1,0]]], color: '#800080' }, // T
     { rotations: [[[0,0], [1,0], [-1,-1], [0,-1]], [[0,0], [0,1], [1,-1], [1,0]]], color: '#008000' }, // S
     { rotations: [[[-1,0], [0,0], [0,-1], [1,-1]], [[0,-1], [0,0], [1,0], [1,1]]], color: '#FF0000' }, // Z
-    // J piece
     {
         rotations: [
             [[-1,0], [0,0], [1,0], [-1,1]],  // J1
@@ -20,7 +19,6 @@ const TETRIMINOS = [
         ],
         color: '#0000FF'
     },
-    // L piece
     {
         rotations: [
             [[-1,0], [0,0], [1,0], [1,1]],   // L1
@@ -40,6 +38,17 @@ let isPaused = false;
 let gameOver = false;
 let lastFallTime = 0;
 const fallInterval = 1000;
+
+// Variables for auto mode
+let isAuto = false;
+let autoMoveTarget = null;
+
+// Check URL parameter for autopilot mode.
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('autopilot') === 'true') {
+    isAuto = true;
+    console.log('Autopilot triggered by URL parameter');
+}
 
 function spawnPiece() {
     const type = Math.floor(Math.random() * TETRIMINOS.length);
@@ -166,20 +175,161 @@ function render() {
     document.getElementById('highScore').textContent = `High Score: ${highScore}`;
 }
 
+// ----- Auto mode helper functions -----
+
+function isValidPositionSimulated(piece, boardState) {
+    const { type, rotation, x, y } = piece;
+    const blocks = TETRIMINOS[type].rotations[rotation];
+    for (const [dx, dy] of blocks) {
+        const boardX = x + dx;
+        const boardY = y + dy;
+        if (boardX < 0 || boardX >= boardWidth || boardY >= boardHeight) return false;
+        if (boardY >= 0 && boardState[boardY][boardX] !== null) return false;
+    }
+    return true;
+}
+
+function getValidPositionsForPiece(type, rotation) {
+    const offsets = TETRIMINOS[type].rotations[rotation];
+    let minX = Infinity, maxX = -Infinity;
+    for (const [dx] of offsets) {
+        if (dx < minX) minX = dx;
+        if (dx > maxX) maxX = dx;
+    }
+    let positions = [];
+    for (let x = -minX; x < boardWidth - maxX; x++) {
+        positions.push(x);
+    }
+    return positions;
+}
+
+function simulateClearRows(boardState) {
+    let newBoard = boardState.map(row => row.slice());
+    let linesCleared = 0;
+    for (let row = boardHeight - 1; row >= 0; row--) {
+        if (newBoard[row].every(cell => cell !== null)) {
+            newBoard.splice(row, 1);
+            newBoard.unshift(Array(boardWidth).fill(null));
+            linesCleared++;
+            row++;
+        }
+    }
+    return { newBoard, linesCleared };
+}
+
+function simulateLanding(piece, boardState) {
+    let simPiece = { ...piece };
+    while (isValidPositionSimulated(simPiece, boardState)) {
+        simPiece.y++;
+    }
+    simPiece.y--; // Last valid position
+    let newBoard = boardState.map(row => row.slice());
+    const blocks = TETRIMINOS[simPiece.type].rotations[simPiece.rotation];
+    for (const [dx, dy] of blocks) {
+        const boardX = simPiece.x + dx;
+        const boardY = simPiece.y + dy;
+        if (boardY >= 0) newBoard[boardY][boardX] = TETRIMINOS[simPiece.type].color;
+    }
+    return simulateClearRows(newBoard);
+}
+
+function computeHeuristic(simResult) {
+    const boardState = simResult.newBoard;
+    const linesCleared = simResult.linesCleared;
+    let aggregateHeight = 0;
+    let holes = 0;
+    let bumpiness = 0;
+    let columnHeights = [];
+
+    for (let x = 0; x < boardWidth; x++) {
+        let colHeight = 0;
+        for (let y = 0; y < boardHeight; y++) {
+            if (boardState[y][x] !== null) {
+                colHeight = boardHeight - y;
+                break;
+            }
+        }
+        columnHeights[x] = colHeight;
+        aggregateHeight += colHeight;
+        let blockFound = false;
+        for (let y = 0; y < boardHeight; y++) {
+            if (boardState[y][x] !== null) {
+                blockFound = true;
+            } else if (blockFound) {
+                holes++;
+            }
+        }
+    }
+    for (let x = 0; x < boardWidth - 1; x++) {
+        bumpiness += Math.abs(columnHeights[x] - columnHeights[x + 1]);
+    }
+    // Weighted heuristic: lower aggregate height, fewer holes and bumpiness are better; clearing lines gives a bonus.
+    const score = -0.510066 * aggregateHeight + 0.760666 * linesCleared - 0.35663 * holes - 0.184483 * bumpiness;
+    return score;
+}
+
+function getBestMove(piece, boardState) {
+    let bestScore = -Infinity;
+    let bestTarget = { targetRotation: piece.rotation, targetX: piece.x };
+
+    for (let r = 0; r < TETRIMINOS[piece.type].rotations.length; r++) {
+        const validXs = getValidPositionsForPiece(piece.type, r);
+        for (let x of validXs) {
+            const testPiece = { type: piece.type, rotation: r, x: x, y: piece.y };
+            while (isValidPositionSimulated(testPiece, boardState)) {
+                testPiece.y++;
+            }
+            testPiece.y--;
+            if (testPiece.y < 0) continue;
+            const simResult = simulateLanding(testPiece, boardState);
+            const score = computeHeuristic(simResult);
+            if (score > bestScore) {
+                bestScore = score;
+                bestTarget = { targetRotation: r, targetX: x };
+            }
+        }
+    }
+    return bestTarget;
+}
+
 function update(time = 0) {
     if (!isPaused && !gameOver) {
-        if (time - lastFallTime >= fallInterval) {
-            if (!movePiece(0, 1)) landPiece();
-            lastFallTime = time;
+        if (isAuto) {
+            // Compute best move if not already computed for the current piece.
+            if (!autoMoveTarget) {
+                autoMoveTarget = getBestMove(currentPiece, board);
+            }
+            // Rotate until the piece reaches the target rotation.
+            if (currentPiece.rotation !== autoMoveTarget.targetRotation) {
+                rotatePiece();
+            }
+            // Move horizontally toward the target.
+            else if (currentPiece.x < autoMoveTarget.targetX) {
+                movePiece(1, 0);
+            } else if (currentPiece.x > autoMoveTarget.targetX) {
+                movePiece(-1, 0);
+            }
+            // Once aligned, perform a hard drop.
+            else {
+                while (movePiece(0, 1)) {}
+                landPiece();
+                autoMoveTarget = null;
+            }
+        } else {
+            if (time - lastFallTime >= fallInterval) {
+                if (!movePiece(0, 1)) landPiece();
+                lastFallTime = time;
+            }
         }
     }
     render();
     requestAnimationFrame(update);
 }
 
-// Event listeners
+// ----- Event Listeners -----
 document.addEventListener('keydown', (e) => {
-    if (!isPaused && !gameOver) {
+    // Disable manual controls if in auto mode.
+    if (!isPaused && !gameOver && !isAuto) {
         switch (e.key) {
             case 'ArrowLeft': movePiece(-1, 0); break;
             case 'ArrowRight': movePiece(1, 0); break;
@@ -195,6 +345,7 @@ document.getElementById('newGame').addEventListener('click', () => {
     score = 0;
     gameOver = false;
     isPaused = false;
+    autoMoveTarget = null;
     spawnPiece();
 });
 
@@ -203,18 +354,16 @@ document.getElementById('pause').addEventListener('click', () => {
 });
 
 document.getElementById('auto').addEventListener('click', () => {
-    console.log('Auto mode not implemented');
+    isAuto = !isAuto;
+    console.log(`Auto mode ${isAuto ? 'enabled' : 'disabled'}`);
+    autoMoveTarget = null;
 });
 
-// Attach a generic event listener to all buttons so that they lose focus after being clicked.
-// This fixes an issue where the button remains focused, causing subsequent spacebar keyup events
-// to trigger the button's click event (e.g., inadvertently starting a new game).
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', (e) => {
         e.target.blur();
     });
 });
 
-// Start the game
 spawnPiece();
 requestAnimationFrame(update);
