@@ -7,3 +7,6 @@
 | preview_white.svg          | sharing card light mode             |
 | preview_white_8bit.png     | sharing card final 8bit render      |
 
+Note that `hero.svg` has automatic light/dark mode:
+
+![Screenshot](https://github.com/user-attachments/assets/0148a76f-fb85-4107-bc56-50aefa748044)
