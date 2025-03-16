@@ -4,7 +4,7 @@ An update on my [Tetris 2023](https://github.com/rdancer/tetris-2023) project, w
 
 The project was completed almost entirely by prompt engineering, first by Grok v3 and then by various OpenAI models. SVG assets have all been generated with ChatGPT assistance.
 
-![hero image](assets/anim08.svg)
+![hero image](assets/hero.svg)
 
 
 ## Gameplay
