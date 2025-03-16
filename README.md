@@ -22,3 +22,7 @@ the `Auto` button toggles self-play.
 * autoplay sometimes crashes
 * layout is not great, this is even more true for mobile
 * OpenGraph doesn't work 
+
+## See also
+
+[*Tetris 2023*](https://github.com/rdancer/tetris-2023)
